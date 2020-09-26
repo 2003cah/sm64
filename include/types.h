@@ -26,8 +26,8 @@ struct Controller
   /*0x04*/ float stickX;        // [-64, 64] positive is right
   /*0x08*/ float stickY;        // [-64, 64] positive is up
   /*0x0C*/ float stickMag;      // distance from center [0, 64]
-  /*0x10*/ u16 buttonDown;
-  /*0x12*/ u16 buttonPressed;
+  /*0x10*/ u32 buttonDown;
+  /*0x12*/ u32 buttonPressed;
   /*0x14*/ OSContStatus *statusData;
   /*0x18*/ OSContPad *controllerData;
 #ifdef VERSION_SH
@@ -284,7 +284,7 @@ struct MarioAnimation
 struct MarioState
 {
     /*0x00*/ u16 unk00;
-    /*0x02*/ u16 input;
+    /*0x02*/ u32 input;
     /*0x04*/ u32 flags;
     /*0x08*/ u32 particleFlags;
     /*0x0C*/ u32 action;
@@ -343,6 +343,9 @@ struct MarioState
     /*0xBC*/ f32 peakHeight;
     /*0xC0*/ f32 quicksandDepth;
     /*0xC4*/ f32 unkC4;
+    /*????*/ s8 airhopped; // I'm unsure on what determines the 0x** on the left, so...
+    /*????*/ s8 airdashed;
+    /*????*/ u8 LHoldTimer;
 };
 
 #endif // TYPES_H

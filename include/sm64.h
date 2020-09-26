@@ -49,22 +49,24 @@
 #define LAYER_TRANSPARENT_DECAL 6
 #define LAYER_TRANSPARENT_INTER 7
 
-#define INPUT_NONZERO_ANALOG         0x0001
-#define INPUT_A_PRESSED              0x0002
-#define INPUT_OFF_FLOOR              0x0004
-#define INPUT_ABOVE_SLIDE            0x0008
-#define INPUT_FIRST_PERSON           0x0010
-#define INPUT_UNKNOWN_5              0x0020
-#define INPUT_SQUISHED               0x0040
-#define INPUT_A_DOWN                 0x0080
-#define INPUT_IN_POISON_GAS          0x0100
-#define INPUT_IN_WATER               0x0200
-#define INPUT_UNKNOWN_10             0x0400
-#define INPUT_INTERACT_OBJ_GRABBABLE 0x0800
-#define INPUT_UNKNOWN_12             0x1000
-#define INPUT_B_PRESSED              0x2000
-#define INPUT_Z_DOWN                 0x4000
-#define INPUT_Z_PRESSED              0x8000
+#define INPUT_NONZERO_ANALOG         /*0x00000001*/ (1 <<  0)
+#define INPUT_A_PRESSED              /*0x00000002*/ (1 <<  1)
+#define INPUT_OFF_FLOOR              /*0x00000004*/ (1 <<  2)
+#define INPUT_ABOVE_SLIDE            /*0x00000008*/ (1 <<  3)
+#define INPUT_FIRST_PERSON           /*0x00000010*/ (1 <<  4)
+#define INPUT_UNKNOWN_5              /*0x00000020*/ (1 <<  5)
+#define INPUT_SQUISHED               /*0x00000040*/ (1 <<  6)
+#define INPUT_A_DOWN                 /*0x00000080*/ (1 <<  7)
+#define INPUT_IN_POISON_GAS          /*0x00000100*/ (1 <<  8)
+#define INPUT_IN_WATER               /*0x00000200*/ (1 <<  9)
+#define INPUT_UNKNOWN_10             /*0x00000400*/ (1 << 10)
+#define INPUT_INTERACT_OBJ_GRABBABLE /*0x00000800*/ (1 << 11)
+#define INPUT_UNKNOWN_12             /*0x00001000*/ (1 << 12)
+#define INPUT_B_PRESSED              /*0x00002000*/ (1 << 13)
+#define INPUT_Z_DOWN                 /*0x00004000*/ (1 << 14)
+#define INPUT_Z_PRESSED              /*0x00008000*/ (1 << 15)
+#define INPUT_L_DOWN                 /*0x00010000*/ (1 << 16)
+#define INPUT_L_PRESSED              /*0x00020000*/ (1 << 17)
 
 #define GROUND_STEP_LEFT_GROUND              0
 #define GROUND_STEP_NONE                     1
@@ -257,6 +259,7 @@
 #define ACT_DOUBLE_JUMP                0x03000881 // (0x081 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT)
 #define ACT_TRIPLE_JUMP                0x01000882 // (0x082 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
 #define ACT_BACKFLIP                   0x01000883 // (0x083 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
+#define ACT_AIRHOP                     0x01000884 // (0x084 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
 #define ACT_STEEP_JUMP                 0x03000885 // (0x085 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT)
 #define ACT_WALL_KICK_AIR              0x03000886 // (0x086 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT)
 #define ACT_SIDE_FLIP                  0x01000887 // (0x087 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
@@ -278,6 +281,7 @@
 #define ACT_HOLD_WATER_JUMP            0x010008A3 // (0x0A3 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
 #define ACT_TWIRLING                   0x108008A4 // (0x0A4 | ACT_FLAG_AIR | ACT_FLAG_ATTACKING | ACT_FLAG_SWIMMING_OR_FLYING)
 #define ACT_FORWARD_ROLLOUT            0x010008A6 // (0x0A6 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
+#define ACT_AIRDASH                    0x010008A7 // (0x0A6 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)
 #define ACT_AIR_HIT_WALL               0x000008A7 // (0x0A7 | ACT_FLAG_AIR)
 #define ACT_RIDING_HOOT                0x000004A8 // (0x0A8 | ACT_FLAG_MOVING)
 #define ACT_GROUND_POUND               0x008008A9 // (0x0A9 | ACT_FLAG_AIR | ACT_FLAG_ATTACKING)

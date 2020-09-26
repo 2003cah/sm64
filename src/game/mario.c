@@ -882,6 +882,20 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
         case ACT_JUMP_KICK:
             m->vel[1] = 20.0f;
             break;
+        case ACT_AIRHOP:
+            if (m->vel[1] > -40.0f) {
+                m->vel[1] = (60.0f + (m->vel[1] / 10));
+                m->forwardVel = m->forwardVel + 5.0f;
+
+    }
+            if (m->vel[1] <= -40.0f) {
+                m->vel[1] = (60.0f + (m->vel[1] / 8));
+                m->forwardVel = m->forwardVel + 5.0f;
+            }
+            break;
+        case ACT_AIRDASH:
+            break;
+
     }
 
     m->peakHeight = m->pos[1];
@@ -977,6 +991,7 @@ static u32 set_mario_action_cutscene(struct MarioState *m, u32 action, UNUSED u3
  * specific function if needed.
  */
 u32 set_mario_action(struct MarioState *m, u32 action, u32 actionArg) {
+    check_airhop(m);
     switch (action & ACT_GROUP_MASK) {
         case ACT_GROUP_MOVING:
             action = set_mario_action_moving(m, action, actionArg);
@@ -1259,6 +1274,14 @@ void update_mario_button_inputs(struct MarioState *m) {
         m->input |= INPUT_A_DOWN;
     }
 
+    if (m->controller->buttonPressed & L_TRIG) {
+        m->input |= INPUT_L_PRESSED;
+    }
+
+    if (m->controller->buttonDown & L_TRIG) {
+        m->input |= INPUT_L_DOWN;
+    }
+
     // Don't update for these buttons if squished.
     if (m->squishTimer == 0) {
         if (m->controller->buttonPressed & B_BUTTON) {
@@ -1284,6 +1307,14 @@ void update_mario_button_inputs(struct MarioState *m) {
         m->framesSinceB = 0;
     } else if (m->framesSinceB < 0xFF) {
         m->framesSinceB += 1;
+    }
+    if (m->input & INPUT_L_DOWN && m->airdashed == FALSE) {
+        m->LHoldTimer += 1;
+    } else if (m->LHoldTimer <10 && m->action != ACT_AIRDASH) {
+        m->LHoldTimer = 0;
+    }
+    if (m->LHoldTimer >= 100) {
+        m->LHoldTimer = 100;
     }
 }
 
@@ -1717,10 +1748,16 @@ s32 execute_mario_action(UNUSED struct Object *o) {
             switch (gMarioState->action & ACT_GROUP_MASK) {
                 case ACT_GROUP_STATIONARY:
                     inLoop = mario_execute_stationary_action(gMarioState);
+                    gMarioState->airhopped = FALSE;
+                    gMarioState->airdashed = FALSE;
+                    gMarioState->LHoldTimer = 0;
                     break;
 
                 case ACT_GROUP_MOVING:
                     inLoop = mario_execute_moving_action(gMarioState);
+                    gMarioState->airhopped = FALSE;
+                    gMarioState->airdashed = FALSE;
+                    gMarioState->LHoldTimer = 0;
                     break;
 
                 case ACT_GROUP_AIRBORNE:
@@ -1729,14 +1766,23 @@ s32 execute_mario_action(UNUSED struct Object *o) {
 
                 case ACT_GROUP_SUBMERGED:
                     inLoop = mario_execute_submerged_action(gMarioState);
+                    gMarioState->airhopped = FALSE;
+                    gMarioState->airdashed = FALSE;
+                    gMarioState->LHoldTimer = 0;
                     break;
 
                 case ACT_GROUP_CUTSCENE:
                     inLoop = mario_execute_cutscene_action(gMarioState);
+                    gMarioState->airhopped = FALSE;
+                    gMarioState->airdashed = FALSE;
+                    gMarioState->LHoldTimer = 0;
                     break;
 
                 case ACT_GROUP_AUTOMATIC:
                     inLoop = mario_execute_automatic_action(gMarioState);
+                    gMarioState->airhopped = FALSE;
+                    gMarioState->airdashed = FALSE;
+                    gMarioState->LHoldTimer = 0;
                     break;
 
                 case ACT_GROUP_OBJECT:
@@ -1793,6 +1839,7 @@ void init_mario(void) {
     gMarioState->actionTimer = 0;
     gMarioState->framesSinceA = 0xFF;
     gMarioState->framesSinceB = 0xFF;
+    gMarioState->airhopped = FALSE;
 
     gMarioState->invincTimer = 0;
 
@@ -1882,7 +1929,7 @@ void init_mario_from_save_file(void) {
         save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
     gMarioState->numKeys = 0;
 
-    gMarioState->numLives = 4;
+    gMarioState->numLives = -49;
     gMarioState->health = 0x880;
 
     gMarioState->prevNumStarsForDialog = gMarioState->numStars;

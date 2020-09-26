@@ -264,12 +264,15 @@ void render_hud_power_meter(void) {
 
 /**
  * Renders the amount of lives Mario has.
- */
+ 
+... If we wanted that to show up. There might be a more elegant way to do this with HUD flags, but this just Works.
+
 void render_hud_mario_lives(void) {
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(22), HUD_TOP_Y, ","); // 'Mario Head' glyph
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(38), HUD_TOP_Y, "*"); // 'X' glyph
     print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(54), HUD_TOP_Y, "%d", gHudDisplay.lives);
 }
+*/
 
 /**
  * Renders the amount of coins collected.
