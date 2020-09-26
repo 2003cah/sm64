@@ -274,6 +274,11 @@ void render_hud_mario_lives(void) {
 }
 */
 
+// Renders the L hold timer, this will probably be modified a bit so it only displays when you're doing the airdash.
+void render_L_timer(void) {
+    print_text_fmt_int(30,50,"%d",gMarioState->LHoldTimer);
+}
+
 /**
  * Renders the amount of coins collected.
  */
@@ -478,5 +483,6 @@ void render_hud(void) {
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_TIMER) {
             render_hud_timer();
         }
+        render_L_timer();
     }
 }
