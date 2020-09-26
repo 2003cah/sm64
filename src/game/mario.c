@@ -895,7 +895,9 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             break;
         case ACT_AIRDASH:
             break;
-
+        case ACT_GROUND_POUND_JUMP:
+            m->vel[1] = 65.0f;
+            break;
     }
 
     m->peakHeight = m->pos[1];
