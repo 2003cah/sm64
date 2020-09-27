@@ -455,7 +455,7 @@ s32 act_jump(struct MarioState *m) {
     if (check_kick_or_dive_in_air(m)) {
         return TRUE;
     }
-    if (m->actionTimer >= 9 && m->input & INPUT_A_PRESSED) {
+    if (++(m->actionTimer) >= 10 && m->input & INPUT_A_PRESSED) {
         return set_mario_action(m, ACT_AIRHOP, 0);
     }
     
@@ -481,10 +481,8 @@ s32 act_double_jump(struct MarioState *m) {
     if (check_kick_or_dive_in_air(m)) {
         return TRUE;
     }
-    if (++(m->actionTimer) >= 9) {
-        if (m->input & INPUT_A_PRESSED) {
-            return set_mario_action(m, ACT_AIRHOP, 0);
-        }
+    if (++(m->actionTimer) >= 10 && m->input & INPUT_A_PRESSED) {
+        return set_mario_action(m, ACT_AIRHOP, 0);  
     }
 
     if (AIRDASH_PARAMS) {
@@ -517,12 +515,8 @@ s32 act_triple_jump(struct MarioState *m) {
     if (m->input & INPUT_Z_PRESSED) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
-    if (m->input & INPUT_A_PRESSED && m->actionTimer >= 5) {
+    if (++(m->actionTimer) >= 10 && m->input & INPUT_A_PRESSED) {
         return set_mario_action(m, ACT_AIRHOP, 0);
-    }
-    else
-    {
-        m->actionTimer++;
     }
 
 #ifndef VERSION_JP
@@ -575,10 +569,9 @@ s32 act_freefall(struct MarioState *m) {
     if (m->input & INPUT_Z_PRESSED) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
-    if (m->input & INPUT_A_PRESSED && m->actionTimer >= 15) {
+    if (++(m->actionTimer) >= 15 && m->input & INPUT_A_PRESSED) {
         return set_mario_action(m, ACT_AIRHOP, 0);
     }
-    else m->actionTimer++;
 
     switch (m->actionArg) {
         case 0:
@@ -648,7 +641,7 @@ s32 act_side_flip(struct MarioState *m) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
     
-    if (m->actionTimer >= 9 && m->input & INPUT_A_PRESSED) {
+    if (++(m->actionTimer) >= 10 && m->input & INPUT_A_PRESSED) {
         return set_mario_action(m, ACT_AIRHOP, 0);
     }
     
@@ -656,7 +649,6 @@ s32 act_side_flip(struct MarioState *m) {
         return set_mario_action(m, ACT_AIRDASH, 0);
     }
 
-    m->actionTimer++;
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, 0);
 
     if (common_air_action_step(m, ACT_SIDE_FLIP_LAND, MARIO_ANIM_SLIDEFLIP, AIR_STEP_CHECK_LEDGE_GRAB)
@@ -679,16 +671,14 @@ s32 act_wall_kick_air(struct MarioState *m) {
     if (m->input & INPUT_Z_PRESSED) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
-    if (++(m->actionTimer) >= 9) {
-        if (m->input & INPUT_A_PRESSED && m->airhopped == FALSE) {
-            set_mario_action(m, ACT_AIRHOP, 0);
-        }
+    if (++(m->actionTimer) >= 9 && m->input & INPUT_A_PRESSED && m->airhopped == FALSE) {
+        set_mario_action(m, ACT_AIRHOP, 0);
     }
+
     if (AIRDASH_PARAMS) {
         return set_mario_action(m, ACT_AIRDASH, 0);
     }
     
-    m->actionTimer++;
     play_mario_jump_sound(m);
     common_air_action_step(m, ACT_JUMP_LAND, MARIO_ANIM_SLIDEJUMP, AIR_STEP_CHECK_LEDGE_GRAB);
     return FALSE;
@@ -1755,11 +1745,10 @@ s32 act_ground_pound_jump(struct MarioState *m) {
     if (AIRDASH_PARAMS) {
         return set_mario_action(m, ACT_AIRDASH, 0);
     }
-    if (m->actionTimer >= 9 && m->input & INPUT_A_PRESSED && m->airhopped == FALSE) {
+    if (++(m->actionTimer) >= 10 && m->input & INPUT_A_PRESSED && m->airhopped == FALSE) {
         return set_mario_action(m, ACT_AIRHOP, 0);
     }
 
-    m->actionTimer ++;
     update_air_without_turn(m);
     common_air_action_step(m, ACT_FREEFALL_LAND, MARIO_ANIM_TRIPLE_JUMP, 0);
     return FALSE;
