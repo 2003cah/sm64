@@ -27,7 +27,7 @@ void play_far_fall_sound(struct MarioState *m) {
     u32 action = m->action;
     if (!(action & ACT_FLAG_INVULNERABLE) && action != ACT_TWIRLING && action != ACT_FLYING
         && !(m->flags & MARIO_UNKNOWN_18)) {
-        if (m->peakHeight - m->pos[1] > 1150.0f) {
+        if (m->peakHeight - m->pos[1] > 3100.0f) {
             play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
             m->flags |= MARIO_UNKNOWN_18;
         }
@@ -82,14 +82,14 @@ s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
     if (m->actionState == ACT_GROUND_POUND) {
         damageHeight = 600.0f;
     } else {
-        damageHeight = 2500.0f;
+        damageHeight = 3000.0f;
     }
 
 #pragma GCC diagnostic pop
 
     if (m->action != ACT_TWIRLING && m->floor->type != SURFACE_BURNING) {
         if (m->vel[1] < -55.0f) {
-            if (fallHeight > 3500.0f) {
+            if (fallHeight > 5000.0f) {
                 m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 16 : 24;
 #ifdef VERSION_SH
                 queue_rumble_data(5, 80);
@@ -671,7 +671,7 @@ s32 act_wall_kick_air(struct MarioState *m) {
     if (m->input & INPUT_Z_PRESSED) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
-    if (++(m->actionTimer) >= 9 && m->input & INPUT_A_PRESSED && m->airhopped == FALSE) {
+    if (++(m->actionTimer) >= 10 && m->input & INPUT_A_PRESSED && m->airhopped == FALSE) {
         set_mario_action(m, ACT_AIRHOP, 0);
     }
 
@@ -1718,7 +1718,7 @@ s32 act_airdash(struct MarioState *m) {
         }
         if (m->input & INPUT_A_PRESSED && m->airhopped == FALSE) {
             m->LHoldTimer = 0;
-            m->forwardVel /= 2;
+            m->forwardVel *= 0.6f;
             return set_mario_action(m, ACT_AIRHOP, 0);
         }
 

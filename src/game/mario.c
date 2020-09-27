@@ -885,13 +885,13 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
         case ACT_AIRHOP:
             if (m->vel[1] > -40.0f) {
                 m->vel[1] = (60.0f + (m->vel[1] / 10));
-                m->forwardVel = m->forwardVel + 5.0f;
-
-    }
+            }
             if (m->vel[1] <= -40.0f) {
                 m->vel[1] = (60.0f + (m->vel[1] / 8));
-                m->forwardVel = m->forwardVel + 5.0f;
             }
+            if (m->forwardVel > 65.0f) {
+                m->forwardVel = 65.0f;
+            } 
             break;
         case ACT_AIRDASH:
             break;
@@ -1789,6 +1789,9 @@ s32 execute_mario_action(UNUSED struct Object *o) {
 
                 case ACT_GROUP_OBJECT:
                     inLoop = mario_execute_object_action(gMarioState);
+                    gMarioState->airhopped = FALSE;
+                    gMarioState->airdashed = FALSE;
+                    gMarioState->LHoldTimer = 0;
                     break;
             }
         }
@@ -1842,6 +1845,7 @@ void init_mario(void) {
     gMarioState->framesSinceA = 0xFF;
     gMarioState->framesSinceB = 0xFF;
     gMarioState->airhopped = FALSE;
+    gMarioState->airdashed = FALSE;
 
     gMarioState->invincTimer = 0;
 
