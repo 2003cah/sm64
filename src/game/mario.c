@@ -884,13 +884,13 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             break;
         case ACT_AIRHOP:
             if (m->vel[1] > -40.0f) {
-                m->vel[1] = (60.0f + (m->vel[1] / 10));
+                m->vel[1] = (55.0f + (m->vel[1] / 10));
             }
             if (m->vel[1] <= -40.0f) {
-                m->vel[1] = (60.0f + (m->vel[1] / 8));
+                m->vel[1] = (55.0f + (m->vel[1] / 8));
             }
-            if (m->forwardVel > 65.0f) {
-                m->forwardVel = 65.0f;
+            if (m->forwardVel > 69.0f) {
+                m->forwardVel = 69.0f;
             } 
             break;
         case ACT_AIRDASH:
@@ -993,7 +993,6 @@ static u32 set_mario_action_cutscene(struct MarioState *m, u32 action, UNUSED u3
  * specific function if needed.
  */
 u32 set_mario_action(struct MarioState *m, u32 action, u32 actionArg) {
-    check_airhop(m);
     switch (action & ACT_GROUP_MASK) {
         case ACT_GROUP_MOVING:
             action = set_mario_action_moving(m, action, actionArg);

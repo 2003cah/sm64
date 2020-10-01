@@ -14,7 +14,7 @@
 #include "save_file.h"
 #include "thread6.h"
 
-#define AIRDASH_PARAMS m->input & INPUT_L_DOWN && m->LHoldTimer >= 10 && m->airdashed == FALSE
+#define AIRDASH_PARAMS m->LHoldTimer >= 10 && m->airdashed == FALSE
 
 void play_flip_sounds(struct MarioState *m, s16 frame1, s16 frame2, s16 frame3) {
     s32 animFrame = m->marioObj->header.gfx.animInfo.animFrame;
@@ -58,15 +58,6 @@ s32 lava_boost_on_wall(struct MarioState *m) {
     play_sound(SOUND_MARIO_ON_FIRE, m->marioObj->header.gfx.cameraToObject);
     update_mario_sound_and_camera(m);
     return drop_and_set_mario_action(m, ACT_LAVA_BOOST, 1);
-}
-
-s32 check_airhop(struct MarioState *m) {
-    if (m->action == ACT_AIRHOP) {
-        m->airhopped = TRUE;
-        // This is mostly a remnant of experimentation from earlier, this doesn't need to be a separate thing and should be removed
-    }
-
-    return FALSE;
 }
 
 s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
@@ -1693,7 +1684,7 @@ s32 act_airhop(struct MarioState *m) {
         return set_mario_action(m, ACT_AIRDASH, 0);
     }
 
-    check_airhop(m);
+    m->airhopped = TRUE;
     update_air_with_turn(m);
     common_air_action_step(m, ACT_FREEFALL_LAND, MARIO_ANIM_FORWARD_SPINNING, AIR_STEP_CHECK_LEDGE_GRAB | AIR_STEP_CHECK_HANG);
     return FALSE;
