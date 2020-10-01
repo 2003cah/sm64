@@ -889,14 +889,14 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             if (m->vel[1] <= -40.0f) {
                 m->vel[1] = (55.0f + (m->vel[1] / 8));
             }
-            if (m->forwardVel > 69.0f) {
-                m->forwardVel = 69.0f;
+            if (m->forwardVel > 65.0f) {
+                m->forwardVel = 65.0f;
             } 
             break;
         case ACT_AIRDASH:
             break;
         case ACT_GROUND_POUND_JUMP:
-            m->vel[1] = 65.0f;
+            m->vel[1] = 69.0f;
             break;
     }
 
