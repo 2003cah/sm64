@@ -1745,6 +1745,23 @@ s32 act_ground_pound_jump(struct MarioState *m) {
     return FALSE;
 }
 
+s32 act_dive_flip(struct MarioState *m) {
+    if (m->actionState == 0) {
+        play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_PUNCH_HOO);
+        m->actionState = 1;
+    }
+    if (m->forwardVel > 65.0f) {
+        m->forwardVel = 65.0f;
+    }
+    if (m->forwardVel < 40.0f) {
+        m->forwardVel = 40.0f;
+    }
+
+    update_air_without_turn(m);
+    common_air_action_step(m, ACT_FREEFALL_LAND, MARIO_ANIM_TRIPLE_JUMP, 0);
+    return FALSE;
+}
+
 s32 act_jump_kick(struct MarioState *m) {
     s32 animFrame;
 
@@ -2191,6 +2208,7 @@ s32 mario_execute_airborne_action(struct MarioState *m) {
         case ACT_AIRHOP:               cancel = act_airhop(m);               break;
         case ACT_AIRDASH:              cancel = act_airdash(m);              break;
         case ACT_GROUND_POUND_JUMP:    cancel = act_ground_pound_jump(m);    break;
+        case ACT_DIVE_FLIP:            cancel = act_dive_flip(m);            break;
         case ACT_JUMP:                 cancel = act_jump(m);                 break;
         case ACT_DOUBLE_JUMP:          cancel = act_double_jump(m);          break;
         case ACT_FREEFALL:             cancel = act_freefall(m);             break;

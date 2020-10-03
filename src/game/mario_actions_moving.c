@@ -1559,12 +1559,16 @@ s32 act_hold_stomach_slide(struct MarioState *m) {
 }
 
 s32 act_dive_slide(struct MarioState *m) {
-    if (!(m->input & INPUT_ABOVE_SLIDE) && (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED))) {
+    if (!(m->input & INPUT_ABOVE_SLIDE) && m->input & INPUT_B_PRESSED) {
 #ifdef VERSION_SH
         queue_rumble_data(5, 80);
 #endif
-        return set_mario_action(m, m->forwardVel > 0.0f ? ACT_FORWARD_ROLLOUT : ACT_BACKWARD_ROLLOUT,
-                                0);
+        m->forwardVel += 5.0f;
+        m->vel[1] = 25.0f;
+        return set_mario_action(m, ACT_DIVE, 0);
+    }
+    if (!(m->input & INPUT_ABOVE_SLIDE) && m->input & INPUT_A_PRESSED) {
+        return set_mario_action(m, m->forwardVel > 15.0f ? ACT_DIVE_FLIP : ACT_FORWARD_ROLLOUT, 0);
     }
 
     play_mario_landing_sound_once(m, SOUND_ACTION_TERRAIN_BODY_HIT_GROUND);
@@ -1574,7 +1578,7 @@ s32 act_dive_slide(struct MarioState *m) {
     // mario_check_object_grab, and so will end up in the regular picking action,
     // rather than the picking up after dive action.
 
-    if (update_sliding(m, 8.0f) && is_anim_at_end(m)) {
+    if (update_sliding(m, 2.0f) && is_anim_at_end(m)) {
         mario_set_forward_vel(m, 0.0f);
         set_mario_action(m, ACT_STOMACH_SLIDE_STOP, 0);
     }

@@ -8,5 +8,6 @@ Currently in the testbench:
 + The Airhop, a pretty standard double jump that you can steer a little bit. Activated by pressing A in midair, with some exceptions
 + The Airdash, a forward zoom that you charge by holding the L button. The longer you charge, the longer and faster you fly!
 + The ground pound jump. I tried to do this in Mario 64 like an idiot, so now it's in the game.
-- You get -50 lives and there's no HUD for it. This mostly prevents the chances of a game over, unless a really dedicated player wants to grab 50 lives. There's probably a better way to do this.
++ A Sunshine-esque dive. You can still kick in the air.
+- Removed the lives HUD element, and you start with -50 lives. This mostly prevents the chances of a game over, unless a really dedicated player wants to grab 50 lives. There's definitely a better way to do this.
 ```

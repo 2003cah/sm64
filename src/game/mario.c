@@ -898,6 +898,9 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
         case ACT_GROUND_POUND_JUMP:
             m->vel[1] = 69.0f;
             break;
+        case ACT_DIVE_FLIP:
+            m->vel[1] = 35.0f;
+            m->forwardVel = 55.0f + (m->forwardVel / 4);
     }
 
     m->peakHeight = m->pos[1];
