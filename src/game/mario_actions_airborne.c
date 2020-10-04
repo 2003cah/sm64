@@ -1748,6 +1748,7 @@ s32 act_ground_pound_jump(struct MarioState *m) {
 s32 act_dive_flip(struct MarioState *m) {
     if (m->actionState == 0) {
         play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_PUNCH_HOO);
+        set_mario_anim_with_accel(m, MARIO_ANIM_FORWARD_FLIP, 0x11000);
         m->actionState = 1;
     }
     if (m->forwardVel > 65.0f) {
@@ -1758,7 +1759,47 @@ s32 act_dive_flip(struct MarioState *m) {
     }
 
     update_air_without_turn(m);
-    common_air_action_step(m, ACT_FREEFALL_LAND, MARIO_ANIM_TRIPLE_JUMP, 0);
+    switch (perform_air_step(m, 0)) {
+        case AIR_STEP_LANDED:
+            if (!check_fall_damage_or_get_stuck(m, ACT_HARD_BACKWARD_GROUND_KB)) {
+                set_mario_action(m, ACT_FREEFALL_LAND, 0);
+            }
+            break;
+        case AIR_STEP_HIT_LAVA_WALL:
+            lava_boost_on_wall(m);
+            break;
+        case AIR_STEP_HIT_WALL:
+            if (m->forwardVel > 16.0f) {
+                m->LHoldTimer = 0;
+                mario_bonk_reflection(m, FALSE);
+                m->faceAngle[1] += 0x8000;
+
+                if (m->wall != NULL) {
+                    set_mario_action(m, ACT_AIR_HIT_WALL, 0);
+                } else {
+                    if (m->vel[1] > 0.0f) {
+                        m->vel[1] = 0.0f;
+                    }
+                    if (m->forwardVel >= 38.0f) {
+                        m->particleFlags |= PARTICLE_VERTICAL_STAR;
+                        set_mario_action(m, ACT_BACKWARD_AIR_KB, 0);
+                    } else {
+                        if (m->forwardVel > 8.0f) {
+                            mario_set_forward_vel(m, -8.0f);
+                        }
+                        return set_mario_action(m, ACT_SOFT_BONK, 0);
+                    }
+                }
+            } else {
+                mario_set_forward_vel(m, 0.0f);
+            }
+            break;
+        case AIR_STEP_GRABBED_LEDGE:
+            set_mario_animation(m, MARIO_ANIM_IDLE_ON_LEDGE);
+            drop_and_set_mario_action(m, ACT_LEDGE_GRAB, 0);
+            break;
+    }
+    m->marioObj->header.gfx.angle[1] += 0x8000; // animation is flipped by default, this fixes it.
     return FALSE;
 }
 
