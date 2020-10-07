@@ -1748,14 +1748,14 @@ s32 act_ground_pound_jump(struct MarioState *m) {
 s32 act_dive_flip(struct MarioState *m) {
     if (m->actionState == 0) {
         play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_PUNCH_HOO);
-        set_mario_anim_with_accel(m, MARIO_ANIM_FORWARD_FLIP, 0x11000);
+        set_mario_anim_with_accel(m, MARIO_ANIM_FORWARD_FLIP, 0xF000);
         m->actionState = 1;
     }
     if (m->forwardVel > 65.0f) {
         m->forwardVel = 65.0f;
     }
-    if (m->forwardVel < 40.0f) {
-        m->forwardVel = 40.0f;
+    if (m->forwardVel < 30.0f) {
+        m->forwardVel = 30.0f;
     }
 
     update_air_without_turn(m);

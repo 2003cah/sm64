@@ -9,5 +9,7 @@ Currently in the testbench:
 + The Airdash, a forward zoom that you charge by holding the L button. The longer you charge, the longer and faster you fly!
 + The ground pound jump. I tried to do this in Mario 64 like an idiot, so now it's in the game.
 + A Sunshine-esque dive. You can still kick in the air.
++ anonymous_moose's extended bounds patch.
 - Removed the lives HUD element, and you start with -50 lives. This mostly prevents the chances of a game over, unless a really dedicated player wants to grab 50 lives. There's definitely a better way to do this.
+- No more intro.
 ```

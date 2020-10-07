@@ -4,6 +4,9 @@
 #include <PR/ultratypes.h>
 
 #include "types.h"
+#include "engine/extended_bounds.h"
+
+extern u8 gSurfacePoolError;
 
 // NUM_CELLS needs to be a power of 2 so that the bitwise
 // in surface_collision.c functions can work properly
@@ -27,8 +30,8 @@ typedef struct SurfaceNode SpatialPartitionCell[3];
 // Needed for bs bss reordering memes.
 extern s32 unused8038BE90;
 
-extern SpatialPartitionCell gStaticSurfacePartition[NUM_CELLS][NUM_CELLS];
-extern SpatialPartitionCell gDynamicSurfacePartition[NUM_CELLS][NUM_CELLS];
+extern SpatialPartitionCell gStaticSurfacePartition[CELL_AMOUNT][CELL_AMOUNT];
+extern SpatialPartitionCell gDynamicSurfacePartition[CELL_AMOUNT][CELL_AMOUNT];
 extern struct SurfaceNode *sSurfaceNodePool;
 extern struct Surface *sSurfacePool;
 extern s16 sSurfacePoolSize;
